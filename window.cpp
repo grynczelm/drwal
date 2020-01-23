@@ -1,5 +1,10 @@
 #include "window.hpp"
 
+Window::Window()
+{
+
+}
+
 Window::Window(unsigned short height, unsigned short width, unsigned short startY, unsigned short startX, bool renderBox)
 {
     w_height = height;
@@ -9,6 +14,11 @@ Window::Window(unsigned short height, unsigned short width, unsigned short start
     w_renderBox = renderBox;
 
     render();
+}
+
+vector<unsigned short> Window::getSize()
+{
+    return vector<unsigned short>{w_height, w_width, w_startY, w_startX};
 }
 
 WINDOW * Window::getWindow()

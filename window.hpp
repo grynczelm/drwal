@@ -15,12 +15,15 @@ class Window
     public:
         string someText;
 
+        Window();
         Window(unsigned short height, unsigned short width, unsigned short startY, unsigned short startX, bool renderBox=true);
 
+        vector<unsigned short> getSize();
         WINDOW * getWindow();
         
         void draw(const char* text);
 
         void render();
 };
+
 #endif

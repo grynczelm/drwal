@@ -1,5 +1,6 @@
 #ifndef DRWAL_H_FILE
 #define DRWAL_H_FILE
+
 #include "includes.hpp"
 
 WINDOW * mainWin;
@@ -9,5 +10,6 @@ WINDOW * dataWin;
 int pressedKey;
 
 unsigned short yMax, xMax;
-unsigned short choicesSize, chosen;
+unsigned short menuSize, chosen;
+
 #endif

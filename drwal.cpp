@@ -1,4 +1,5 @@
 #include "window.hpp"
+#include "menu.hpp"
 #include "drwal.hpp"
 
 using namespace std;
@@ -12,13 +13,29 @@ int main(int argc, char ** argv)
 
     getmaxyx(stdscr, yMax, xMax);
 
-    string choices[4] = {"Zlecenia", "Awarie", "Magazyn", "Zmiany"};
-    choicesSize = sizeof(choices) / sizeof(choices[0]);
     refresh();
 
     mainWin = Window(20, xMax/2, yMax/5, xMax/4).getWindow();
     menuWin = Window(3, (xMax/2)-2, (yMax/5)-1, (xMax/4)+1).getWindow();
-    dataWin = Window(17, (xMax/2)-2, (yMax/5)+2, (xMax/4)+1).getWindow();
+
+    Window dataObj;
+    dataObj = Window(17, (xMax/2)-2, (yMax/5)+2, (xMax/4)+1);
+
+    dataWin = dataObj.getWindow();
+
+    Menu menu = Menu(dataObj.getSize());
+
+    menu.add("Zlecenia");
+    menu.add("Awarie");
+    menu.add("Magazyn");
+    menu.add("Zmiany");
+
+    //menu.add("Zlecenia", new Zlecenie());
+    //menu.add("Awarie", new Awarie());
+    //menu.add("Magazyn", new Magazyn());
+    //menu.add("Zmiany", new Zmiany());
+
+    menuSize = menu.getSize();
 
     Window menuZlecenia = Window(15, (xMax/2)-4, (yMax/5)+3, (xMax/4)+2, false);
     menuZlecenia.draw("Menu zleceń");
@@ -35,6 +52,7 @@ int main(int argc, char ** argv)
     vector<Window> menus = {menuZlecenia, menuAwarie, menuMagazyn, menuZmiany};
 
     keypad(menuWin, true);
+    keypad(dataWin, true);
     curs_set(0);
 
     chosen = 0;
@@ -45,11 +63,11 @@ int main(int argc, char ** argv)
 
         lastData.render();
 
-        for (unsigned short i=0; i<choicesSize; ++i) {
+        for (unsigned short i=0; i<menuSize; ++i) {
             if (chosen == i)
                 wattron(menuWin, A_REVERSE);
-            mvwprintw(menuWin, 1, overallLength, choices[i].c_str());
-            overallLength += choices[i].length()+4;
+            mvwprintw(menuWin, 1, overallLength, menu.getTitle(i).c_str());
+            overallLength += menu.getTitle(i).length()+4;
             wattroff(menuWin, A_REVERSE);
         }
 
@@ -57,13 +75,13 @@ int main(int argc, char ** argv)
         pressedKey =  wgetch(menuWin);
         
         
-        if (pressedKey == KEY_RIGHT && chosen < (choicesSize-1))
+        if (pressedKey == KEY_RIGHT && chosen < (menuSize-1))
             ++chosen;
         if (pressedKey == KEY_LEFT && chosen > 0)
             --chosen;
         
         if (pressedKey == '\t') {
-            if (chosen == (choicesSize-1)) {
+            if (chosen == (menuSize-1)) {
                 chosen = 0;
             } else {
                 ++chosen;
